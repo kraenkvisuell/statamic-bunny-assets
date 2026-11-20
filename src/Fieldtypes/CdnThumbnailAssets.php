@@ -20,6 +20,10 @@ use Statamic\Fieldtypes\Assets\Assets;
  */
 class CdnThumbnailAssets extends Assets
 {
+    // Statamic's handle: the CP picks the field's (index) component by it, and the class name would
+    // make it `cdn_thumbnail_assets`, whose listing cells then show the raw JSON
+    protected static $handle = 'assets';
+
     /** @var array<string, Asset> the assets of the current preProcessIndex() */
     protected array $indexAssets = [];
 

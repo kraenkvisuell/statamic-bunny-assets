@@ -106,6 +106,8 @@ class AssetsTest extends TestCase
         $field = new Field('images', ['type' => 'assets', 'container' => 'assets']);
         $fieldtype = $field->fieldtype();
         $this->assertInstanceOf(CdnThumbnailAssets::class, $fieldtype);
+        $this->assertSame('assets', $fieldtype->indexComponent());
+        $this->assertSame('assets', $fieldtype->component());
 
         $index = $fieldtype->preProcessIndex(['uploads/photo.jpg', 'uploads/other.jpg']);
         $thumbnails = collect($index['assets'])->pluck('thumbnail', 'basename');

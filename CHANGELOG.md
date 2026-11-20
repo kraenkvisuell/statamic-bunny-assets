@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.4 – 2026-11-20
+
+- Fix for v0.2.3: the replaced assets fieldtype keeps the handle `assets`. With the handle from its
+  class name the CP found no component for it, and listing cells showed the raw JSON.
+
 ## v0.2.3 – 2026-11-20
 
 - CP thumbnails from the CDN in entry listings' assets cells too (`Fieldtypes\CdnThumbnailAssets`):
