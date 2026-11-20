@@ -1,6 +1,6 @@
 <?php
 
-namespace Kraenkvisuell\StatamicBunny\Assets;
+namespace Kraenkvisuell\StatamicBunnyAssets\Assets;
 
 use Statamic\Assets\Asset;
 use Statamic\Facades\Glide;
@@ -29,7 +29,7 @@ class CdnThumbnailAsset extends Asset
 
     protected function cdnThumbnailUrl(?string $preset): ?string
     {
-        if (! config('kraenk-statamic-bunny.cdn_thumbnails') || ! Glide::shouldServeDirectly() || ! $this->isImage() || $this->isSvg()) {
+        if (! config('statamic-bunny-assets.cdn_thumbnails') || ! Glide::shouldServeDirectly() || ! $this->isImage() || $this->isSvg()) {
             return null;
         }
 

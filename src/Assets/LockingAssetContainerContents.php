@@ -1,6 +1,6 @@
 <?php
 
-namespace Kraenkvisuell\StatamicBunny\Assets;
+namespace Kraenkvisuell\StatamicBunnyAssets\Assets;
 
 use Closure;
 use Statamic\Assets\AssetContainerContents;

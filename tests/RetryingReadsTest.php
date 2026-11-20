@@ -1,9 +1,9 @@
 <?php
 
-namespace Kraenkvisuell\StatamicBunny\Tests;
+namespace Kraenkvisuell\StatamicBunnyAssets\Tests;
 
 use Illuminate\Support\Facades\Storage;
-use Kraenkvisuell\StatamicBunny\Filesystem\RetryingReads;
+use Kraenkvisuell\StatamicBunnyAssets\Filesystem\RetryingReads;
 use League\Flysystem\Config;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use League\Flysystem\UnableToReadFile;

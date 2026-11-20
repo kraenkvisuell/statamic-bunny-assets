@@ -1,16 +1,16 @@
 <?php
 
-namespace Kraenkvisuell\StatamicBunny;
+namespace Kraenkvisuell\StatamicBunnyAssets;
 
 use Illuminate\Filesystem\AwsS3V3Adapter;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
-use Kraenkvisuell\StatamicBunny\Assets\CdnThumbnailAsset;
-use Kraenkvisuell\StatamicBunny\Assets\LockingAssetContainerContents;
-use Kraenkvisuell\StatamicBunny\Filesystem\RetryingReads;
-use Kraenkvisuell\StatamicBunny\Imaging\OriginalGifManipulator;
+use Kraenkvisuell\StatamicBunnyAssets\Assets\CdnThumbnailAsset;
+use Kraenkvisuell\StatamicBunnyAssets\Assets\LockingAssetContainerContents;
+use Kraenkvisuell\StatamicBunnyAssets\Filesystem\RetryingReads;
+use Kraenkvisuell\StatamicBunnyAssets\Imaging\OriginalGifManipulator;
 use League\Flysystem\Filesystem as Flysystem;
 use Statamic\Assets\AssetContainerContents;
 use Statamic\Contracts\Assets\Asset;
@@ -29,21 +29,21 @@ class ServiceProvider extends AddonServiceProvider
     {
         parent::register();
 
-        $this->mergeConfigFrom(__DIR__.'/../config/kraenk-statamic-bunny.php', 'kraenk-statamic-bunny');
+        $this->mergeConfigFrom(__DIR__.'/../config/statamic-bunny-assets.php', 'statamic-bunny-assets');
     }
 
     public function bootAddon(): void
     {
         $this->publishes([
-            __DIR__.'/../config/kraenk-statamic-bunny.php' => config_path('kraenk-statamic-bunny.php'),
-        ], 'kraenk-statamic-bunny-config');
+            __DIR__.'/../config/statamic-bunny-assets.php' => config_path('statamic-bunny-assets.php'),
+        ], 'statamic-bunny-assets-config');
 
         $this->registerDisk();
 
         // the Eloquent driver's asset table has its own listing and asset class
         $fileAssets = config('statamic.eloquent-driver.assets.driver', 'file') !== 'eloquent';
 
-        if ($fileAssets && config('kraenk-statamic-bunny.locking_listing')) {
+        if ($fileAssets && config('statamic-bunny-assets.locking_listing')) {
             $this->app->bind(AssetContainerContents::class, LockingAssetContainerContents::class);
 
             // A queue worker keeps the listing it read first (Blink isn't reset between jobs), so
@@ -66,8 +66,8 @@ class ServiceProvider extends AddonServiceProvider
             $s3 = Storage::createS3Driver($config);
             $adapter = new RetryingReads(
                 $s3->getAdapter(),
-                $config['retries'] ?? config('kraenk-statamic-bunny.retries', 3),
-                $config['retry_delay'] ?? config('kraenk-statamic-bunny.retry_delay', 500),
+                $config['retries'] ?? config('statamic-bunny-assets.retries', 3),
+                $config['retry_delay'] ?? config('statamic-bunny-assets.retry_delay', 500),
             );
             $filesystem = new Flysystem($adapter, Arr::only($config, [
                 'directory_visibility', 'disable_asserts', 'retain_visibility', 'temporary_url', 'url', 'visibility',

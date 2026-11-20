@@ -1,6 +1,6 @@
 <?php
 
-namespace Kraenkvisuell\StatamicBunny\Console\Commands;
+namespace Kraenkvisuell\StatamicBunnyAssets\Console\Commands;
 
 use GuzzleHttp\Promise\Utils;
 use Illuminate\Console\Attributes\Description;
@@ -18,7 +18,7 @@ use Throwable;
  * per image, which makes the first render of a page with many images take minutes. On S3 disks the files
  * are fetched in parallel. Run it once on a new server or after clearing the asset_meta store.
  */
-#[Signature('bunny:warm-asset-meta {container? : Container handle (default: all)} {--concurrency=32 : Parallel requests on S3 disks} {--force : Reload metadata that is cached already}')]
+#[Signature('bunny-assets:warm-asset-meta {container? : Container handle (default: all)} {--concurrency=32 : Parallel requests on S3 disks} {--force : Reload metadata that is cached already}')]
 #[Description('Load the metadata of all assets into the meta cache')]
 class WarmAssetMeta extends Command
 {

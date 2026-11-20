@@ -2,14 +2,14 @@
 
 # CLAUDE.md
 
-Statamic addon `kraenkvisuell/kraenk-statamic-bunny`: what every Statamic 6 site on Bunny Storage +
+Statamic addon `kraenkvisuell/statamic-bunny-assets`: what every Statamic 6 site on Bunny Storage +
 CDN needs that is code rather than config. See README.md for what it provides. Used by kraenk-26 and,
 through `kraenkvisuell/kraenk-statamic-reps`, by the artist representation sites.
 
-- Every part can be switched off in `config/kraenk-statamic-bunny.php`. Don't read `env()` outside
+- Every part can be switched off in `config/statamic-bunny-assets.php`. Don't read `env()` outside
   that file (config caching).
 - Sites require tagged releases from Packagist (public repo, MIT); releasing is in README.md. To test
-  a change before tagging, point a site at `../kraenk-statamic-bunny` as a path repository locally
+  a change before tagging, point a site at `../statamic-bunny-assets` as a path repository locally
   (don't commit that) and run its tests.
 - Several classes replace Statamic internals (`AssetContainerContents`, the asset class, the image
   manipulator) and rebuild what Statamic does internally (the CP thumbnail params

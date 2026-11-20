@@ -1,9 +1,9 @@
 <?php
 
-namespace Kraenkvisuell\StatamicBunny\Tests;
+namespace Kraenkvisuell\StatamicBunnyAssets\Tests;
 
 use Illuminate\Support\Facades\Storage;
-use Kraenkvisuell\StatamicBunny\ServiceProvider;
+use Kraenkvisuell\StatamicBunnyAssets\ServiceProvider;
 use Statamic\Facades\AssetContainer;
 use Statamic\Testing\AddonTestCase;
 use Statamic\Testing\Concerns\PreventsSavingStacheItemsToDisk;

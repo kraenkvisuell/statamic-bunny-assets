@@ -1,7 +1,7 @@
 {
-    "name": "kraenkvisuell/kraenk-statamic-bunny",
+    "name": "kraenkvisuell/statamic-bunny-assets",
     "description": "Statamic 6 on Bunny Storage + CDN: parallel uploads that don't drop each other's files, CP thumbnails from the Glide CDN, original GIFs, retried reads and a meta cache warmer.",
-    "homepage": "https://github.com/kraenkvisuell/kraenk-statamic-bunny",
+    "homepage": "https://github.com/kraenkvisuell/statamic-bunny-assets",
     "keywords": [
         "statamic",
         "statamic-addon",
@@ -30,22 +30,22 @@
     },
     "autoload": {
         "psr-4": {
-            "Kraenkvisuell\\StatamicBunny\\": "src"
+            "Kraenkvisuell\\StatamicBunnyAssets\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Kraenkvisuell\\StatamicBunny\\Tests\\": "tests"
+            "Kraenkvisuell\\StatamicBunnyAssets\\Tests\\": "tests"
         }
     },
     "extra": {
         "statamic": {
-            "name": "Kraenk Statamic Bunny",
+            "name": "Statamic Bunny Assets",
             "description": "Statamic on Bunny Storage + CDN"
         },
         "laravel": {
             "providers": [
-                "Kraenkvisuell\\StatamicBunny\\ServiceProvider"
+                "Kraenkvisuell\\StatamicBunnyAssets\\ServiceProvider"
             ]
         }
     },

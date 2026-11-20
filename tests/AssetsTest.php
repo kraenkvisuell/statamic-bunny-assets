@@ -1,6 +1,6 @@
 <?php
 
-namespace Kraenkvisuell\StatamicBunny\Tests;
+namespace Kraenkvisuell\StatamicBunnyAssets\Tests;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Queue\Events\JobProcessing;
@@ -75,7 +75,7 @@ class AssetsTest extends TestCase
             $asset->thumbnailUrl('small'),
         );
 
-        config(['kraenk-statamic-bunny.cdn_thumbnails' => false]);
+        config(['statamic-bunny-assets.cdn_thumbnails' => false]);
         $this->assertStringContainsString('/cp/thumbnails/', $asset->thumbnailUrl('small'));
     }
 
@@ -87,7 +87,7 @@ class AssetsTest extends TestCase
         $this->assertSame('https://assets.example.com/uploads/anim.gif', Image::manipulate($gif, ['w' => 400]));
         $this->assertStringNotContainsString('https://assets.example.com/uploads/anim.gif', Image::manipulate($gif, ['w' => 400, 'fm' => 'jpg']));
 
-        config(['kraenk-statamic-bunny.original_gifs' => false]);
+        config(['statamic-bunny-assets.original_gifs' => false]);
         $this->assertStringNotContainsString('https://assets.example.com/uploads/anim.gif', Image::manipulate($gif, ['w' => 400]));
     }
 }

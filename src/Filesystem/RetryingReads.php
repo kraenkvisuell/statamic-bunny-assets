@@ -1,6 +1,6 @@
 <?php
 
-namespace Kraenkvisuell\StatamicBunny\Filesystem;
+namespace Kraenkvisuell\StatamicBunnyAssets\Filesystem;
 
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;

@@ -1,12 +1,12 @@
-# Kraenk Statamic Bunny
+# Statamic Bunny Assets
 
 Fixes and tools for Statamic 6 sites whose assets live on [Bunny Storage](https://bunny.net) (via its
 S3 API) behind a Bunny pull zone, with the Glide cache on the same storage. Every part can be switched
 off in the config.
 
 ```bash
-composer require kraenkvisuell/kraenk-statamic-bunny
-php artisan vendor:publish --tag=kraenk-statamic-bunny-config   # only to change the defaults
+composer require kraenkvisuell/statamic-bunny-assets
+php artisan vendor:publish --tag=statamic-bunny-assets-config   # only to change the defaults
 ```
 
 ## What it does
@@ -37,7 +37,7 @@ php artisan vendor:publish --tag=kraenk-statamic-bunny-config   # only to change
   Bunny's replicas are sometimes out of step and answer 404 or an error for a few seconds; one such
   read would abort a Glide render or a meta write. Only failures are retried (`retries`,
   `retry_delay` per disk or in the config); writes pass through.
-- **`php artisan bunny:warm-asset-meta`** loads the `.meta/*.yaml` files of all assets into
+- **`php artisan bunny-assets:warm-asset-meta`** loads the `.meta/*.yaml` files of all assets into
   Statamic's meta cache, in parallel on S3 disks. Uncached, every image a page renders costs one
   storage request. Run it after a deploy that cleared the cache, on a new server, or after
   `cache:clear asset_meta`.
@@ -59,7 +59,7 @@ generates them on upload.
 Versions are git tags (`v0.1.0`, …). Under 1.0 a minor bump (`v0.2.0`) means sites need changes, a
 patch (`v0.1.1`) is a fix. Release: commit, run the tests (`composer test`) and the sites' tests
 against the change, `git tag -a v0.x.y -m v0.x.y && git push --follow-tags`; then per site
-`composer update kraenkvisuell/kraenk-statamic-bunny`, test, commit `composer.lock`.
+`composer update kraenkvisuell/statamic-bunny-assets`, test, commit `composer.lock`.
 
 ## License
 

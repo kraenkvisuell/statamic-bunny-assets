@@ -1,6 +1,6 @@
 <?php
 
-namespace Kraenkvisuell\StatamicBunny\Imaging;
+namespace Kraenkvisuell\StatamicBunnyAssets\Imaging;
 
 use Statamic\Contracts\Assets\Asset;
 use Statamic\Facades\Asset as Assets;
@@ -18,7 +18,7 @@ class OriginalGifManipulator extends GlideImageManipulator
     public function build()
     {
         // assets without a public URL (a private disk) still go through Glide
-        if (config('kraenk-statamic-bunny.original_gifs') && ! array_key_exists('fm', $this->params ?? []) && ($url = $this->gif()?->url())) {
+        if (config('statamic-bunny-assets.original_gifs') && ! array_key_exists('fm', $this->params ?? []) && ($url = $this->gif()?->url())) {
             return $url;
         }
 
