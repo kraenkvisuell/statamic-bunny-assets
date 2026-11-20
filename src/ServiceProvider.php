@@ -51,13 +51,12 @@ class ServiceProvider extends AddonServiceProvider
             Event::listen(JobProcessing::class, fn () => Blink::flushStartingWith('asset-listing-cache-'));
         }
 
-        if ($fileAssets && config('kraenk-statamic-bunny.cdn_thumbnails')) {
+        // cdn_thumbnails and original_gifs are checked on every call, so they can change at runtime
+        if ($fileAssets) {
             $this->app->bind(Asset::class, CdnThumbnailAsset::class);
         }
 
-        if (config('kraenk-statamic-bunny.original_gifs')) {
-            $this->app->bind(ImageManipulator::class, fn ($app) => new OriginalGifManipulator($app->make(UrlBuilder::class)));
-        }
+        $this->app->bind(ImageManipulator::class, fn ($app) => new OriginalGifManipulator($app->make(UrlBuilder::class)));
     }
 
     // `'driver' => 'bunny'`: the S3 driver with retried reads (see Filesystem\RetryingReads)

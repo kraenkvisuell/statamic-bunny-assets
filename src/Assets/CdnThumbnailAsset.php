@@ -29,7 +29,7 @@ class CdnThumbnailAsset extends Asset
 
     protected function cdnThumbnailUrl(?string $preset): ?string
     {
-        if (! Glide::shouldServeDirectly() || ! $this->isImage() || $this->isSvg()) {
+        if (! config('kraenk-statamic-bunny.cdn_thumbnails') || ! Glide::shouldServeDirectly() || ! $this->isImage() || $this->isSvg()) {
             return null;
         }
 

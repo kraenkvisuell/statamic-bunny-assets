@@ -74,6 +74,9 @@ class AssetsTest extends TestCase
             'https://cdn.example.com/glide-cache/containers/assets/uploads/photo.jpg/abc123/photo.jpg?v=',
             $asset->thumbnailUrl('small'),
         );
+
+        config(['kraenk-statamic-bunny.cdn_thumbnails' => false]);
+        $this->assertStringContainsString('/cp/thumbnails/', $asset->thumbnailUrl('small'));
     }
 
     public function test_gifs_keep_their_original_file_unless_a_format_is_asked_for(): void
@@ -83,5 +86,8 @@ class AssetsTest extends TestCase
 
         $this->assertSame('https://assets.example.com/uploads/anim.gif', Image::manipulate($gif, ['w' => 400]));
         $this->assertStringNotContainsString('https://assets.example.com/uploads/anim.gif', Image::manipulate($gif, ['w' => 400, 'fm' => 'jpg']));
+
+        config(['kraenk-statamic-bunny.original_gifs' => false]);
+        $this->assertStringNotContainsString('https://assets.example.com/uploads/anim.gif', Image::manipulate($gif, ['w' => 400]));
     }
 }
