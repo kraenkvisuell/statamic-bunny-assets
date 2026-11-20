@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.5 – 2026-11-20
+
+- Tested on Statamic 6.0.0 as well as the latest 6.x: the listing cells test matches cells by asset
+  id (older 6.x versions put no basename into them). No change to the addon itself.
+- GitHub Actions run the tests on the newest and the oldest supported versions.
+
 ## v0.2.4 – 2026-11-20
 
 - Fix for v0.2.3: the replaced assets fieldtype keeps the handle `assets`. With the handle from its

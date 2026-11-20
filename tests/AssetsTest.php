@@ -110,11 +110,12 @@ class AssetsTest extends TestCase
         $this->assertSame('assets', $fieldtype->component());
 
         $index = $fieldtype->preProcessIndex(['uploads/photo.jpg', 'uploads/other.jpg']);
-        $thumbnails = collect($index['assets'])->pluck('thumbnail', 'basename');
+        // by id: older Statamic 6 versions put no basename into the cells
+        $thumbnails = collect($index['assets'])->pluck('thumbnail', 'id');
 
         // generated: the CDN file; not generated yet: Statamic's route as before
-        $this->assertStringStartsWith('https://cdn.example.com/glide-cache/containers/assets/uploads/photo.jpg/abc123/photo.jpg?v=', $thumbnails['photo.jpg']);
-        $this->assertStringContainsString('/cp/thumbnails/', $thumbnails['other.jpg']);
+        $this->assertStringStartsWith('https://cdn.example.com/glide-cache/containers/assets/uploads/photo.jpg/abc123/photo.jpg?v=', $thumbnails['assets::uploads/photo.jpg']);
+        $this->assertStringContainsString('/cp/thumbnails/', $thumbnails['assets::uploads/other.jpg']);
         $this->assertSame(2, $index['total']);
     }
 

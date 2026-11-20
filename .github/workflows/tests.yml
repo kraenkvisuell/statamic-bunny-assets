@@ -1,0 +1,33 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # the newest Statamic 6 on the newest PHP
+          - php: '8.5'
+            dependencies: highest
+          # the oldest Statamic 6 (6.0.0) on the oldest PHP composer.json allows
+          - php: '8.3'
+            dependencies: lowest
+    name: PHP ${{ matrix.php }}, ${{ matrix.dependencies }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php: ${{ matrix.php }}
+          coverage: none
+      # Composer won't install Statamic versions with security advisories (everything before 6.31),
+      # so the lowest run allows them to test what composer.json claims
+      - if: matrix.dependencies == 'lowest'
+        run: composer config audit.block-insecure false
+      - run: composer update --prefer-stable --no-interaction --no-progress ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }}
+      - run: composer show statamic/cms | grep versions
+      - run: vendor/bin/phpunit
