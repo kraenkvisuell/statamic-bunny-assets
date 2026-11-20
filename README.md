@@ -4,10 +4,33 @@ Fixes and tools for Statamic 6 sites whose assets live on [Bunny Storage](https:
 S3 API) behind a Bunny pull zone, with the Glide cache on the same storage. Every part can be switched
 off in the config.
 
+You don't need this addon to use Bunny Storage: its S3 API works as a regular `s3` disk, and Statamic
+runs asset containers and the Glide cache on it as it is. What goes wrong shows up under load and
+over time. Several uploads at once drop files from the container listing, leaving assets with empty
+meta that Glide rejects and the CP can't delete. CP thumbnails are reloaded on every visit because
+the pull zone sends them as `no-cache`. Animated GIFs time out in Glide or fail to upload, and a
+replica briefly out of step aborts a render or a meta write. This addon fixes those, and warms the
+asset meta cache so pages with many images stay fast after a deploy.
+
 ```bash
 composer require kraenkvisuell/statamic-bunny-assets
 php artisan vendor:publish --tag=statamic-bunny-assets-config   # only to change the defaults
 ```
+
+Then switch the Bunny disks in `config/filesystems.php` from `'driver' => 's3'` to
+`'driver' => 'bunny'` (same options otherwise) to get retried reads:
+
+```php
+'assets' => [
+    'driver' => 'bunny',   // was 's3'
+    // … key, secret, region, bucket, endpoint, url as before
+    'retries' => 3,        // optional, defaults from the addon's config
+    'retry_delay' => 500,  // ms, doubled per retry
+],
+```
+
+Everything else works without config changes. CP thumbnails come from the CDN only when
+`statamic.assets.image_manipulation.cache` names a disk with a URL.
 
 ## What it does
 
