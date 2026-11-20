@@ -52,6 +52,11 @@ Everything else works without config changes. CP thumbnails come from the CDN on
   generated a thumbnail, `Assets\CdnThumbnailAsset` links the file on the Glide cache's CDN instead,
   with `?v=<modified>`. Thumbnails not generated yet still go through the route. Needs a Glide cache
   disk with a URL (`statamic.assets.image_manipulation.cache` = a disk name).
+  The assets cells of entry listings (e.g. an image column in a collection's list) too: Statamic
+  builds their thumbnail URLs itself, so `Fieldtypes\CdnThumbnailAssets` replaces the assets
+  fieldtype to ask the asset; a fieldtype extending Statamic's assets fieldtype can extend it instead.
+  A thumbnail is known once the route has generated it on this machine (Glide's cache store is
+  local): `php please assets:generate-presets --preset=cp_thumbnail` once per machine links all of them.
 - **Original GIFs** (`original_gifs`). Glide re-encodes every frame of an animated GIF, takes
   minutes, upscales small ones and produces files too large for a single upload to Bunny (cURL 56).
   `Imaging\OriginalGifManipulator` serves the original file; asking for a format (`fm`) still goes

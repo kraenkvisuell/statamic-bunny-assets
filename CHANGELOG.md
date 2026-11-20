@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.3 – 2026-11-20
+
+- CP thumbnails from the CDN in entry listings' assets cells too (`Fieldtypes\CdnThumbnailAssets`):
+  Statamic writes the thumbnail route into them without asking the asset, so a list with an image
+  column loaded every thumbnail through PHP. Fieldtypes extending Statamic's assets fieldtype can
+  extend `CdnThumbnailAssets` to get the same.
+
 ## v0.2.2 – 2026-11-20
 
 - CP thumbnails from the CDN work on every Statamic 6 version again; before, they threw on versions

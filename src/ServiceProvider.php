@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Kraenkvisuell\StatamicBunnyAssets\Assets\CdnThumbnailAsset;
 use Kraenkvisuell\StatamicBunnyAssets\Assets\LockingAssetContainerContents;
+use Kraenkvisuell\StatamicBunnyAssets\Fieldtypes\CdnThumbnailAssets;
 use Kraenkvisuell\StatamicBunnyAssets\Filesystem\RetryingReads;
 use Kraenkvisuell\StatamicBunnyAssets\Imaging\OriginalGifManipulator;
 use League\Flysystem\Filesystem as Flysystem;
@@ -17,6 +18,7 @@ use Statamic\Contracts\Assets\Asset;
 use Statamic\Contracts\Imaging\ImageManipulator;
 use Statamic\Contracts\Imaging\UrlBuilder;
 use Statamic\Facades\Blink;
+use Statamic\Fieldtypes\Assets\Assets;
 use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
@@ -54,6 +56,9 @@ class ServiceProvider extends AddonServiceProvider
         // cdn_thumbnails and original_gifs are checked on every call, so they can change at runtime
         if ($fileAssets) {
             $this->app->bind(Asset::class, CdnThumbnailAsset::class);
+
+            // the thumbnails in entry listings' assets cells (Statamic builds their URLs itself)
+            $this->app->bind(Assets::class, CdnThumbnailAssets::class);
         }
 
         $this->app->bind(ImageManipulator::class, fn ($app) => new OriginalGifManipulator($app->make(UrlBuilder::class)));

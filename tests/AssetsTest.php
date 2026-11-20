@@ -6,11 +6,13 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Jobs\SyncJob;
 use Illuminate\Support\Facades\Storage;
+use Kraenkvisuell\StatamicBunnyAssets\Fieldtypes\CdnThumbnailAssets;
 use Statamic\Assets\AssetContainerContents;
 use Statamic\Facades\Asset;
 use Statamic\Facades\AssetContainer;
 use Statamic\Facades\Glide;
 use Statamic\Facades\Image;
+use Statamic\Fields\Field;
 use Statamic\Imaging\ImageGenerator;
 
 class AssetsTest extends TestCase
@@ -81,6 +83,37 @@ class AssetsTest extends TestCase
 
         config(['statamic-bunny-assets.cdn_thumbnails' => false]);
         $this->assertStringContainsString('/cp/thumbnails/', $asset->thumbnailUrl('small'));
+    }
+
+    public function test_listing_cells_of_assets_fields_use_the_cdn_thumbnails_too(): void
+    {
+        config([
+            'cache.stores.glide' => ['driver' => 'array'],
+            'statamic.assets.image_manipulation.cache' => 'glide-test',
+        ]);
+        Storage::fake('glide-test', ['url' => 'https://cdn.example.com/glide-cache']);
+
+        Storage::disk('assets')->putFileAs('uploads', UploadedFile::fake()->image('photo.jpg', 40, 20), 'photo.jpg');
+        Storage::disk('assets')->putFileAs('uploads', UploadedFile::fake()->image('other.jpg', 20, 40), 'other.jpg');
+        $asset = Asset::find('assets::uploads/photo.jpg');
+
+        $params = ['p' => "cp_thumbnail_small_{$asset->orientation()}"];
+        $key = method_exists(ImageGenerator::class, 'manipulationCacheKey')
+            ? ImageGenerator::manipulationCacheKey('asset', $asset, $params)
+            : 'asset::'.$asset->id().'::'.md5(json_encode($params));
+        Glide::cacheStore()->forever($key, 'containers/assets/uploads/photo.jpg/abc123/photo.jpg');
+
+        $field = new Field('images', ['type' => 'assets', 'container' => 'assets']);
+        $fieldtype = $field->fieldtype();
+        $this->assertInstanceOf(CdnThumbnailAssets::class, $fieldtype);
+
+        $index = $fieldtype->preProcessIndex(['uploads/photo.jpg', 'uploads/other.jpg']);
+        $thumbnails = collect($index['assets'])->pluck('thumbnail', 'basename');
+
+        // generated: the CDN file; not generated yet: Statamic's route as before
+        $this->assertStringStartsWith('https://cdn.example.com/glide-cache/containers/assets/uploads/photo.jpg/abc123/photo.jpg?v=', $thumbnails['photo.jpg']);
+        $this->assertStringContainsString('/cp/thumbnails/', $thumbnails['other.jpg']);
+        $this->assertSame(2, $index['total']);
     }
 
     public function test_gifs_keep_their_original_file_unless_a_format_is_asked_for(): void
