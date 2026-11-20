@@ -32,6 +32,23 @@ Then switch the Bunny disks in `config/filesystems.php` from `'driver' => 's3'` 
 Everything else works without config changes. CP thumbnails come from the CDN only when
 `statamic.assets.image_manipulation.cache` names a disk with a URL.
 
+## On a new server or machine
+
+The asset meta cache and Glide's cache store (which thumbnails exist) are local cache stores, not on
+Bunny, so a new server or a fresh checkout starts cold. Run once, after the first deploy:
+
+```bash
+php artisan bunny-assets:warm-asset-meta   # asset meta: minutes on a new server, seconds afterwards
+nohup php please assets:generate-presets --preset=cp_thumbnail > storage/logs/cp-thumbnails.log 2>&1 &
+```
+
+The second command lets the CP link every thumbnail on the CDN (see CP thumbnails below). It
+renders each asset's thumbnail once, so it takes hours for ten thousand assets: run it detached as
+above. `--queue` instead puts one job per asset on the default queue, and everything else on that
+queue (static cache invalidation, re-caching after a save) waits behind them. On Forge `storage` is
+a shared path, so neither needs running again on later deploys. Put `warm-asset-meta` in the deploy script anyway:
+it only loads what's missing.
+
 ## What it does
 
 - **Parallel uploads keep each other's files** (`locking_listing`). Statamic keeps a container's
