@@ -28,6 +28,11 @@ jobs:
       # so the lowest run allows them to test what composer.json claims
       - if: matrix.dependencies == 'lowest'
         run: composer config audit.block-insecure false
-      - run: composer update --prefer-stable --no-interaction --no-progress ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }}
+      - if: matrix.dependencies == 'highest'
+        run: composer update --prefer-stable --no-interaction --no-progress
+      # only Statamic at its lowest: --prefer-lowest would also pick the first Laravel 12, whose
+      # own tests no longer boot on current PHP
+      - if: matrix.dependencies == 'lowest'
+        run: composer require statamic/cms:6.0.0 --with-all-dependencies --no-interaction --no-progress
       - run: composer show statamic/cms | grep versions
       - run: vendor/bin/phpunit
