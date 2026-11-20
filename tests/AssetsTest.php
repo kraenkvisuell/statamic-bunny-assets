@@ -65,8 +65,12 @@ class AssetsTest extends TestCase
         $this->assertStringContainsString('/cp/thumbnails/', $asset->thumbnailUrl('small'));
 
         $params = ['p' => "cp_thumbnail_small_{$asset->orientation()}"];
+        // Statamic's own key where it has the method (6.34+), the format it inlined before
+        $key = method_exists(ImageGenerator::class, 'manipulationCacheKey')
+            ? ImageGenerator::manipulationCacheKey('asset', $asset, $params)
+            : 'asset::'.$asset->id().'::'.md5(json_encode($params));
         Glide::cacheStore()->forever(
-            ImageGenerator::manipulationCacheKey('asset', $asset, $params),
+            $key,
             'containers/assets/uploads/photo.jpg/abc123/photo.jpg',
         );
 

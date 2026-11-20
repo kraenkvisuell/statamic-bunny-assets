@@ -77,11 +77,17 @@ the listing by forgetting its cache key (`Cache::forget('asset-list-contents-<co
 (`$asset->writeMeta($asset->generateMeta())`). Their alt texts are missing too, if the site
 generates them on upload.
 
+## Support
+
+Issues and questions on [GitHub](https://github.com/kraenkvisuell/statamic-bunny-assets/issues).
+We use the addon on our own sites and fix what breaks there; other reports are handled on a
+best-effort basis. Changes per release are in [CHANGELOG.md](CHANGELOG.md).
+
 ## Releases
 
 Versions are git tags (`v0.1.0`, …). Under 1.0 a minor bump (`v0.2.0`) means sites need changes, a
-patch (`v0.1.1`) is a fix. Release: commit, run the tests (`composer test`) and the sites' tests
-against the change, `git tag -a v0.x.y -m v0.x.y && git push --follow-tags`; then per site
+patch (`v0.1.1`) is a fix. Release: add the version to `CHANGELOG.md`, commit, run the tests
+(`composer test`) and the sites' tests against the change, `git tag -a v0.x.y -m v0.x.y && git push --follow-tags`; then per site
 `composer update kraenkvisuell/statamic-bunny-assets`, test, commit `composer.lock`.
 
 ## License

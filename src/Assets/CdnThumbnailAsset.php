@@ -4,7 +4,6 @@ namespace Kraenkvisuell\StatamicBunnyAssets\Assets;
 
 use Statamic\Assets\Asset;
 use Statamic\Facades\Glide;
-use Statamic\Imaging\ImageGenerator;
 
 /**
  * CP thumbnails straight from the Glide cache's CDN once they exist.
@@ -33,9 +32,10 @@ class CdnThumbnailAsset extends Asset
             return null;
         }
 
-        // the params Statamic's ThumbnailController generates with
+        // the params Statamic's ThumbnailController generates with, and the key ImageGenerator stores
+        // the result under (ImageGenerator::manipulationCacheKey() since 6.34, the same format inline before)
         $params = $preset ? ['p' => "cp_thumbnail_{$preset}_{$this->orientation()}"] : [];
-        $path = Glide::cacheStore()->get(ImageGenerator::manipulationCacheKey('asset', $this, $params));
+        $path = Glide::cacheStore()->get('asset::'.$this->id().'::'.md5(json_encode($params)));
 
         if (! is_string($path) || $path === '') {
             return null;
